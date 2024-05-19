@@ -5,7 +5,6 @@ import { OrbitControls, Preload, useGLTF } from "@react-three/drei";
 
 import CanvasLoader from "./Loader.jsx";
 
-
 // eslint-disable-next-line react/prop-types,no-unused-vars
 const Burger = ({ scale }) => {
     const burger = useGLTF("./burger/scene.gltf");
@@ -25,7 +24,7 @@ const BurgerCanvas = () => {
             frameloop='always'
             linear={true}
             dpr={[1, 2]}
-            gl={{preserveDrawingBuffer: false}}
+            gl={{ preserveDrawingBuffer: false }}
             camera={{
                 fov: 45,
                 near: 0.1,
@@ -33,19 +32,34 @@ const BurgerCanvas = () => {
                 position: [-4, 3, 6],
             }}
         >
+
+            {/* Iluminación direccional desde diferentes ángulos */}
             {/* eslint-disable-next-line react/no-unknown-property */}
-            <directionalLight position={[10, 10, 5]} intensity={5} color={"#F2EAD3"}/>
+            <directionalLight position={[10, 10, 10]} intensity={2} color={"#F2EAD3"} />
             {/* eslint-disable-next-line react/no-unknown-property */}
-            <directionalLight position={[-10, 10, -5]} intensity={5} color={"#F2EAD3"}/>
+            <directionalLight position={[-10, 10, 10]} intensity={2} color={"#F2EAD3"} />
             {/* eslint-disable-next-line react/no-unknown-property */}
-            <directionalLight position={[5, 5, 5]} intensity={5.2} color={"#F2EAD3"}/>
+            <directionalLight position={[10, -10, 10]} intensity={2} color={"#F2EAD3"} />
             {/* eslint-disable-next-line react/no-unknown-property */}
-            <directionalLight position={[-5, 5, -5]} intensity={5} color={"#F2EAD3"}/>
+            <directionalLight position={[-10, -10, 10]} intensity={2} color={"#F2EAD3"} />
             {/* eslint-disable-next-line react/no-unknown-property */}
-            <directionalLight position={[-10, -5, 0]} intensity={5.2} color={"#F2EAD3"}/>
+            <directionalLight position={[10, 10, -10]} intensity={2} color={"#F2EAD3"} />
             {/* eslint-disable-next-line react/no-unknown-property */}
-            <directionalLight position={[10, -5, 0]} intensity={5.2} color={"#F2EAD3"}/>
-            <Suspense fallback={<CanvasLoader/>}>
+            <directionalLight position={[-10, 10, -10]} intensity={2} color={"#F2EAD3"} />
+            {/* eslint-disable-next-line react/no-unknown-property */}
+            <directionalLight position={[10, -10, -10]} intensity={2} color={"#F2EAD3"} />
+            {/* eslint-disable-next-line react/no-unknown-property */}
+            <directionalLight position={[-10, -10, -10]} intensity={2} color={"#F2EAD3"} />
+            {/* eslint-disable-next-line react/no-unknown-property */}
+            <directionalLight position={[0, 10, 0]} intensity={2} color={"#F2EAD3"} />
+            {/* eslint-disable-next-line react/no-unknown-property */}
+            <directionalLight position={[0, -10, 0]} intensity={2} color={"#F2EAD3"} />
+            {/* eslint-disable-next-line react/no-unknown-property */}
+            <directionalLight position={[0, 0, 10]} intensity={2} color={"#F2EAD3"} />
+            {/* eslint-disable-next-line react/no-unknown-property */}
+            <directionalLight position={[0, 0, -10]} intensity={2} color={"#F2EAD3"} />
+
+            <Suspense fallback={<CanvasLoader />}>
                 <OrbitControls
                     autoRotate
                     enableZoom={false}
@@ -54,9 +68,9 @@ const BurgerCanvas = () => {
                     minPolarAngle={Math.PI / 2}
                 />
                 {/* Pasa la escala como prop (No lo estoy usando por ahora)*/}
-                <Burger scale={scale}/>
+                <Burger scale={scale} />
 
-                <Preload all/>
+                <Preload all />
             </Suspense>
         </Canvas>
     );
