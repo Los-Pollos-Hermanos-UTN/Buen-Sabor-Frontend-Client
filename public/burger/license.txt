@@ -1,0 +1,11 @@
+Model Information:
+* title:	Borgir
+* source:	https://sketchfab.com/3d-models/borgir-3b8612f609e34dd9bbd943fa4c64f21a
+* author:	CzernO (https://sketchfab.com/czernobog)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Borgir" (https://sketchfab.com/3d-models/borgir-3b8612f609e34dd9bbd943fa4c64f21a) by CzernO (https://sketchfab.com/czernobog) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
