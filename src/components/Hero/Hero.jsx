@@ -44,7 +44,6 @@ const Hero = () => {
                 </button>
               </div>
             </div>
-            {/* Image section */}
             <div className="min-h-[450px] sm:min-h-[450px] flex justify-center items-center relative order-1 sm:order-2 ">
                 <BurgerCanvas/>
             </div>

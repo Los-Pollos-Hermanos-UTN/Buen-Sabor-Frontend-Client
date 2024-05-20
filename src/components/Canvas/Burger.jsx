@@ -35,29 +35,29 @@ const BurgerCanvas = () => {
 
             {/* Iluminación direccional desde diferentes ángulos */}
             {/* eslint-disable-next-line react/no-unknown-property */}
-            <directionalLight position={[10, 10, 10]} intensity={2} color={"#F2EAD3"} />
+            <directionalLight position={[10, 10, 10]} intensity={1.3} color={"#F2EAD3"} />
             {/* eslint-disable-next-line react/no-unknown-property */}
-            <directionalLight position={[-10, 10, 10]} intensity={2} color={"#F2EAD3"} />
+            <directionalLight position={[-10, 10, 10]} intensity={1.3} color={"#F2EAD3"} />
             {/* eslint-disable-next-line react/no-unknown-property */}
-            <directionalLight position={[10, -10, 10]} intensity={2} color={"#F2EAD3"} />
+            <directionalLight position={[10, -10, 10]} intensity={1.3} color={"#F2EAD3"} />
             {/* eslint-disable-next-line react/no-unknown-property */}
-            <directionalLight position={[-10, -10, 10]} intensity={2} color={"#F2EAD3"} />
+            <directionalLight position={[-10, -10, 10]} intensity={1.3} color={"#F2EAD3"} />
             {/* eslint-disable-next-line react/no-unknown-property */}
-            <directionalLight position={[10, 10, -10]} intensity={2} color={"#F2EAD3"} />
+            <directionalLight position={[10, 10, -10]} intensity={1.3} color={"#F2EAD3"} />
             {/* eslint-disable-next-line react/no-unknown-property */}
-            <directionalLight position={[-10, 10, -10]} intensity={2} color={"#F2EAD3"} />
+            <directionalLight position={[-10, 10, -10]} intensity={1.3} color={"#F2EAD3"} />
             {/* eslint-disable-next-line react/no-unknown-property */}
-            <directionalLight position={[10, -10, -10]} intensity={2} color={"#F2EAD3"} />
+            <directionalLight position={[10, -10, -10]} intensity={1.3} color={"#F2EAD3"} />
             {/* eslint-disable-next-line react/no-unknown-property */}
-            <directionalLight position={[-10, -10, -10]} intensity={2} color={"#F2EAD3"} />
+            <directionalLight position={[-10, -10, -10]} intensity={1.3} color={"#F2EAD3"} />
             {/* eslint-disable-next-line react/no-unknown-property */}
-            <directionalLight position={[0, 10, 0]} intensity={2} color={"#F2EAD3"} />
+            <directionalLight position={[0, 10, 0]} intensity={1.3} color={"#F2EAD3"} />
             {/* eslint-disable-next-line react/no-unknown-property */}
-            <directionalLight position={[0, -10, 0]} intensity={2} color={"#F2EAD3"} />
+            <directionalLight position={[0, -10, 0]} intensity={1.3} color={"#F2EAD3"} />
             {/* eslint-disable-next-line react/no-unknown-property */}
-            <directionalLight position={[0, 0, 10]} intensity={2} color={"#F2EAD3"} />
+            <directionalLight position={[0, 0, 10]} intensity={1.3} color={"#F2EAD3"} />
             {/* eslint-disable-next-line react/no-unknown-property */}
-            <directionalLight position={[0, 0, -10]} intensity={2} color={"#F2EAD3"} />
+            <directionalLight position={[0, 0, -10]} intensity={1.3} color={"#F2EAD3"} />
 
             <Suspense fallback={<CanvasLoader />}>
                 <OrbitControls
