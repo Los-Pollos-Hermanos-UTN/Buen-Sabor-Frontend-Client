@@ -6,6 +6,8 @@ export default {
     extend: {
       fontFamily: {
         sans: ["Poppins", "sans-serif"],
+        lobster: ['Lobster', 'cursive'],
+        poppins: ['Poppins', 'sans-serif'],
       },
       colors: {
         primary: "#ffc001",
