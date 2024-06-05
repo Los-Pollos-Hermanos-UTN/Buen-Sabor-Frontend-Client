@@ -100,17 +100,69 @@ export default function Menu() {
         }
     };
 
-    const filteredArticulos = categorias.flatMap(categoria =>
-        categoria.articulos.filter(articulo =>
+    const renderArticulos = (categoria) => {
+        return categoria.articulos.filter(articulo =>
             !articulo.eliminado && articulo.precioVenta > 0 &&
             (!selectedCategory || selectedCategory === categoria.id) &&
             (filteredCategories.length === 0 || filteredCategories.includes(categoria.id))
-        ).map(articulo => ({ ...articulo, categoriaId: categoria.id }))
-    );
+        ).map(articulo => (
+            <Card className="w-full" key={articulo.id}>
+                <div className="relative">
+                    <Badge variant="secondary" className="absolute top-2 left-2">
+                        {categoria.denominacion.toUpperCase()}
+                    </Badge>
+                    {articulo.imagenes[0]?.url && (
+                        <img
+                            src={articulo.imagenes[0].url}
+                            alt={articulo.denominacion}
+                            className="w-full h-48 object-cover rounded-t-lg"
+                        />
+                    )}
+                </div>
+                <CardContent className="space-y-2 p-4">
+                    <div className="flex items-center justify-between">
+                        <h3 className="text-lg font-bold">{articulo.denominacion}</h3>
+                        <div className="flex items-center">
+                            <StarIcon className="w-4 h-4 text-yellow-400" />
+                            <span className="ml-1 text-sm font-semibold">4.5</span>
+                        </div>
+                    </div>
+                    <p className="text-sm text-gray-500">
+                        {articulo.denominacion}
+                    </p>
+                    <p className="text-lg font-bold">${articulo.precioVenta}</p>
+                </CardContent>
+            </Card>
+        ));
+    };
+
+    const renderCategoriasRecursivamente = (categorias) => {
+        return categorias.flatMap(categoria => (
+            <>
+                {renderArticulos(categoria)}
+                {renderCategoriasRecursivamente(categoria.subCategorias)}
+            </>
+        ));
+    };
 
     const categoriasConArticulos = categorias.filter(categoria =>
         categoria.articulos.some(articulo => !articulo.eliminado && articulo.precioVenta > 0)
     );
+
+    const renderCategoryButtonsRecursively = (categorias, parentIndex = '') => {
+        return categorias.flatMap((categoria, index) => (
+            <React.Fragment key={`${parentIndex}-${index}`}>
+                <Button
+                    variant="secondary"
+                    className={`flex items-center space-x-1 ${selectedCategory === categoria.id ? 'bg-gray-400' : ''}`}
+                    onClick={() => handleCategoryClick(categoria.id)}
+                >
+                    <span>{categoria.denominacion}</span>
+                </Button>
+                {renderCategoryButtonsRecursively(categoria.subCategorias, `${parentIndex}-${index}`)}
+            </React.Fragment>
+        ));
+    };
 
     return (
         <div className="bg-white p-6">
@@ -133,20 +185,11 @@ export default function Menu() {
             </div>
 
             <div className="flex justify-between items-center mb-6">
-                <div className="flex space-x-4">
+                <div className="flex space-x-4 overflow-x-auto">
                     <Button variant="secondary" className="flex items-center space-x-1" onClick={() => setSelectedCategory(null)}>
                         <ListIcon className="w-5 h-5" /> <span>ALL</span>
                     </Button>
-                    {categoriasConArticulos.slice(0, 5).map((categoria) => (
-                        <Button
-                            key={categoria.id}
-                            variant="secondary"
-                            className={`flex items-center space-x-1 ${selectedCategory === categoria.id ? 'bg-gray-400' : ''}`}
-                            onClick={() => handleCategoryClick(categoria.id)}
-                        >
-                            <span>{categoria.denominacion}</span>
-                        </Button>
-                    ))}
+                    {renderCategoryButtonsRecursively(categoriasConArticulos)}
                 </div>
                 {categoriasConArticulos.length > 5 && (
                     <Button variant="outline" className="flex items-center space-x-1" onClick={() => setModalIsOpen(true)}>
@@ -156,35 +199,7 @@ export default function Menu() {
             </div>
 
             <div className="grid grid-cols-3 gap-6">
-                {filteredArticulos.map((articulo) => (
-                    <Card className="w-full" key={articulo.id}>
-                        <div className="relative">
-                            <Badge variant="secondary" className="absolute top-2 left-2">
-                                {categorias.find(c => c.id === articulo.categoriaId)?.denominacion.toUpperCase()}
-                            </Badge>
-                            {articulo.imagenes[0]?.url && (
-                                <img
-                                    src={articulo.imagenes[0].url}
-                                    alt={articulo.denominacion}
-                                    className="w-full h-48 object-cover rounded-t-lg"
-                                />
-                            )}
-                        </div>
-                        <CardContent className="space-y-2 p-4">
-                            <div className="flex items-center justify-between">
-                                <h3 className="text-lg font-bold">{articulo.denominacion}</h3>
-                                <div className="flex items-center">
-                                    <StarIcon className="w-4 h-4 text-yellow-400" />
-                                    <span className="ml-1 text-sm font-semibold">4.5</span>
-                                </div>
-                            </div>
-                            <p className="text-sm text-gray-500">
-                                {articulo.denominacion}
-                            </p>
-                            <p className="text-lg font-bold">${articulo.precioVenta}</p>
-                        </CardContent>
-                    </Card>
-                ))}
+                {renderCategoriasRecursivamente(categorias)}
             </div>
 
             <Modal
