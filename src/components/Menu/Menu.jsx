@@ -11,6 +11,7 @@ export default function Menu() {
     const [selectedSucursal, setSelectedSucursal] = useState(null);
     const [categorias, setCategorias] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         fetchSucursales();
@@ -18,6 +19,7 @@ export default function Menu() {
 
     useEffect(() => {
         if (selectedSucursal) {
+            setIsLoading(true);
             fetchCategorias(selectedSucursal);
         }
     }, [selectedSucursal]);
@@ -37,8 +39,10 @@ export default function Menu() {
             const response = await fetch(`http://localhost:8080/categoria/listBySucursal/${sucursalId}`);
             const data = await response.json();
             setCategorias(data);
+            setIsLoading(false);
         } catch (error) {
             console.error('Error fetching categorias:', error);
+            setIsLoading(false);
         }
     };
 
@@ -70,13 +74,13 @@ export default function Menu() {
             return selectedCategorias.flatMap(categoria =>
                 categoria.articulos.filter(articulo =>
                     !articulo.eliminado && articulo.precioVenta > 0
-                )
+                ).map(articulo => ({ ...articulo, categoriaDenominacion: categoria.denominacion }))
             );
         } else {
             return allCategorias.flatMap(categoria =>
                 categoria.articulos.filter(articulo =>
                     !articulo.eliminado && articulo.precioVenta > 0
-                )
+                ).map(articulo => ({ ...articulo, categoriaDenominacion: categoria.denominacion }))
             );
         }
     };
@@ -86,7 +90,7 @@ export default function Menu() {
             <Card className="w-full" key={articulo.id}>
                 <div className="relative">
                     <Badge variant="secondary" className="absolute top left">
-                        {articulo.denominacion.toUpperCase()}
+                        {articulo.categoriaDenominacion.toUpperCase()}
                     </Badge>
                     {articulo.imagenes[0]?.url && (
                         <img
@@ -115,7 +119,7 @@ export default function Menu() {
         ));
     };
 
-    const categoriasPrincipales = categorias.filter(categoria => !categoria.padreId);
+    const categoriasPrincipales = categorias.filter(categoria => !categoria.padreId && categoria.articulos.some(articulo => !articulo.eliminado && articulo.precioVenta > 0));
 
     const articulos = getArticulos(categorias, selectedCategory);
 
@@ -162,25 +166,39 @@ export default function Menu() {
                                     <span>{categoria.denominacion.toUpperCase()}</span>
                                 </DropdownMenuItem>
                                 {categoria.subCategorias && categoria.subCategorias.length > 0 && (
-                                    categoria.subCategorias.map(subCategoria => (
-                                        <DropdownMenuItem
-                                            key={subCategoria.id}
-                                            className={`flex items-center space-x-1 w-full md:w-auto pl-8 ${selectedCategory === subCategoria.id ? 'bg-gray-200' : ''}`}
-                                            onClick={() => handleCategoryClick(subCategoria.id)}
-                                        >
-                                            <ListIcon className="w-5 h-5" />
-                                            <span>{subCategoria.denominacion}</span>
-                                        </DropdownMenuItem>
-                                    ))
+                                    categoria.subCategorias
+                                        .filter(subCategoria => subCategoria.articulos.some(articulo => !articulo.eliminado && articulo.precioVenta > 0))
+                                        .map(subCategoria => (
+                                            <DropdownMenuItem
+                                                key={subCategoria.id}
+                                                className={`flex items-center space-x-1 w-full md:w-auto pl-8 ${selectedCategory === subCategoria.id ? 'bg-gray-200' : ''}`}
+                                                onClick={() => handleCategoryClick(subCategoria.id)}
+                                            >
+                                                <ListIcon className="w-5 h-5" />
+                                                <span>{subCategoria.denominacion}</span>
+                                            </DropdownMenuItem>
+                                        ))
                                 )}
                             </div>
                         ))}
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {renderArticulos(articulos)}
-            </div>
+            {selectedSucursal ? (
+                isLoading ? (
+                    <div className="flex justify-center items-center h-64">
+                        <p>Cargando...</p>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                        {articulos.length > 0 ? renderArticulos(articulos) : <p>No hay artículos disponibles.</p>}
+                    </div>
+                )
+            ) : (
+                <div className="flex justify-center items-center h-64">
+                    <p>Seleccione una sucursal</p>
+                </div>
+            )}
         </div>
     );
 }
