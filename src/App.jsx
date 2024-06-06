@@ -1,14 +1,16 @@
 // App.jsx
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
-import Hero from "./components/Hero/Hero";
-import Services from "./components/Services/Services";
+import Hero from "./components/Hero/Hero"
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Footer from "./components/Footer/Footer";
 import Menu from "./components/Menu/Menu.jsx"; // Importa el componente Menu
 import AOS from "aos";
 import "aos/dist/aos.css";
-import Carrito from "./components/Carrito/Carrito.jsx";
+import Carrito from "@/components/Cart/Carrito.jsx";
+import {GlobalProvider} from "@/context/GlobalContext.jsx";
 
 const App = () => {
     React.useEffect(() => {
@@ -23,15 +25,17 @@ const App = () => {
 
     return (
         <div className="bg-white dark:bg-gray-900 dark:text-white duration-200">
-            <Navbar />
-            <Routes>
-                <Route path="/" element={<Hero />} />
-                <Route path="/services" element={<Services />} />
-                <Route path="/carrito" element={<Carrito />} />
-                <Route path="/menu" element={<Menu />} /> {/* Define la ruta para el componente Menu */}
-                {/* Agrega más rutas según sea necesario */}
-            </Routes>
-            <Footer />
+            <GlobalProvider>
+                <Navbar/>
+                <ToastContainer />
+                <Routes>
+                    <Route path="/" element={<Hero/>}/>
+                    <Route path="/carrito" element={<Carrito/>}/>
+                    <Route path="/menu" element={<Menu/>}/> {/* Define la ruta para el componente Menu */}
+                    {/* Agrega más rutas según sea necesario */}
+                </Routes>
+                <Footer/>
+            </GlobalProvider>
         </div>
     );
 };
