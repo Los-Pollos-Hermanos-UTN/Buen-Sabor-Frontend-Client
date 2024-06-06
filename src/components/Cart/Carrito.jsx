@@ -9,9 +9,8 @@ export default function Carrito() {
     const { cart, user } = state;
 
     const totalProductos = cart.reduce((acc, item) => acc + item.precioVenta * item.quantity, 0);
-    const cargosPorDelivery = 5;
-    const impuestos = 3.5;
-    const total = totalProductos + cargosPorDelivery + impuestos;
+    const cargosPorDelivery = totalProductos * 0.05;
+    const total = totalProductos + cargosPorDelivery;
 
     const handleCheckout = () => {
         if (!user) {
@@ -63,10 +62,6 @@ export default function Carrito() {
                     <div className="flex justify-between">
                         <p className="text-sm">Cargos por Delivery</p>
                         <p className="text-sm">${cargosPorDelivery.toFixed(2)}</p>
-                    </div>
-                    <div className="flex justify-between">
-                        <p className="text-sm">Impuestos</p>
-                        <p className="text-sm">${impuestos.toFixed(2)}</p>
                     </div>
                 </div>
                 <div className="flex justify-between items-center py-4">

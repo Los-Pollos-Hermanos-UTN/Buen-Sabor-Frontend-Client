@@ -6,6 +6,7 @@ import Services from "../Services/Services.jsx";
 import Banner from "../Banner/Banner.jsx";
 import Testimonial from "../Testimonial/Testimonial.jsx";
 import Menu from "../Menu/Menu.jsx";
+import {Button} from "@/components/ui/button.jsx";
 
 const Hero = () => {
     const bgImage = {
@@ -46,10 +47,10 @@ const Hero = () => {
                             </p>
                             <div>
                                 <Link to="/menu">
-                                    <button
-                                        className="bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full">
-                                        Pedir ahora
-                                    </button>
+                                    <Button
+                                        className="bg-primary hover:bg-primary hover:scale-105 duration-200 text-white py-2 px-4">
+                                        Ir al Menu
+                                    </Button>
                                 </Link>
                             </div>
                         </div>

@@ -18,7 +18,6 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        sans: ["Poppins", "sans-serif"],
         lobster: ['Lobster', 'cursive'],
         poppins: ['Poppins', 'sans-serif'],
       },
