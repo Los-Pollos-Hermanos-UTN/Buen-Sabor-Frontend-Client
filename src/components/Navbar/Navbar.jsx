@@ -24,9 +24,7 @@ const Navbar = () => {
                             </Link>
                         </div>
                         <div className="flex justify-between items-center gap-4">
-                            <div>
-                                <DarkMode />
-                            </div>
+
                             <ul className="hidden sm:flex items-center gap-4">
                                 {Menu.map((menu) => (
                                     <li key={menu.id}>

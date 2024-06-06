@@ -5,20 +5,20 @@ import Slider from "react-slick";
 const testimonialData = [
   {
     id: 1,
-    name: "Samuel",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque reiciendis inventore iste ratione ex alias quis magni at optio",
+    name: "Bruno Mastropietro",
+    text: "Uno de los mejores restaurantes de la ciudad que he podido probar hasta ahora, si quieren ver un buen repartidor les recomiendo pedir con Luca Zamperoni",
     img: "https://picsum.photos/101/101",
   },
   {
     id: 1,
-    name: "John Doe",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque reiciendis inventore iste ratione ex alias quis magni at optio",
+    name: "Agustin Lobos",
+    text: "El delivery es rápido, la comida llegó rapido y caliente, como el repartidor. Las promos tienen buen precio para compartir y comer con amigos. Recomendado al 100%",
     img: "https://picsum.photos/102/102",
   },
   {
     id: 1,
-    name: "Smith",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque reiciendis inventore iste ratione ex alias quis magni at optio",
+    name: "Santiago Rojo",
+    text: "Todabia no profe",
     img: "https://picsum.photos/103/103",
   },
 ];

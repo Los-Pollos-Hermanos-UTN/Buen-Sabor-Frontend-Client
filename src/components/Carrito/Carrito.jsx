@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 
 export default function Carrito() {
     return (
-        <div className="flex justify-center items-center h-screen">
+        <div className="flex justify-center items-center h-auto p-6">
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-md">
                 <div className="flex items-center justify-between pb-4 border-b">
                     <h2 className="text-2xl font-bold">Carrito (03)</h2>

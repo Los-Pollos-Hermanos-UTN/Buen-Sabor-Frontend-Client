@@ -4,7 +4,6 @@ import Vector from "../../assets/vector3.png";
 import BurgerCanvas from "../Canvas/Burger.jsx";
 import Services from "../Services/Services.jsx";
 import Banner from "../Banner/Banner.jsx";
-import Pruebas from "../Pruebas/Pruebas.jsx";
 import Testimonial from "../Testimonial/Testimonial.jsx";
 import Menu from "../Menu/Menu.jsx";
 
@@ -63,7 +62,6 @@ const Hero = () => {
             </div>
             <Services/>
             <Banner/>
-            <Pruebas/>
             <Testimonial/>
         </>
     );
