@@ -11,7 +11,6 @@ export default function Menu() {
     const [selectedSucursal, setSelectedSucursal] = useState(null);
     const [categorias, setCategorias] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(null);
-    const [filteredCategories, setFilteredCategories] = useState([]);
 
     useEffect(() => {
         fetchSucursales();
@@ -46,7 +45,6 @@ export default function Menu() {
     const handleSucursalChange = (sucursalId) => {
         setSelectedSucursal(sucursalId);
         setSelectedCategory(null);
-        setFilteredCategories([]);
     };
 
     const handleCategoryClick = (categoryId) => {
@@ -63,46 +61,63 @@ export default function Menu() {
         }, []);
     };
 
-    const renderArticulos = (categorias) => {
+    const getArticulos = (categorias, categoryId) => {
         const allCategorias = flattenCategorias(categorias);
-        return allCategorias.flatMap(categoria =>
-            categoria.articulos.filter(articulo =>
-                !articulo.eliminado && articulo.precioVenta > 0
-            ).map(articulo => (
-                <Card className="w-full" key={articulo.id}>
-                    <div className="relative">
-                        <Badge variant="secondary" className="absolute top left">
-                            {categoria.denominacion.toUpperCase()}
-                        </Badge>
-                        {articulo.imagenes[0]?.url && (
-                            <img
-                                src={articulo.imagenes[0].url}
-                                alt={articulo.denominacion}
-                                className="w-full h-48 object-cover rounded-t-lg"
-                            />
-                        )}
+        if (categoryId) {
+            const selectedCategorias = allCategorias.filter(
+                categoria => categoria.id === categoryId || categoria.padreId === categoryId
+            );
+            return selectedCategorias.flatMap(categoria =>
+                categoria.articulos.filter(articulo =>
+                    !articulo.eliminado && articulo.precioVenta > 0
+                )
+            );
+        } else {
+            return allCategorias.flatMap(categoria =>
+                categoria.articulos.filter(articulo =>
+                    !articulo.eliminado && articulo.precioVenta > 0
+                )
+            );
+        }
+    };
+
+    const renderArticulos = (articulos) => {
+        return articulos.map(articulo => (
+            <Card className="w-full" key={articulo.id}>
+                <div className="relative">
+                    <Badge variant="secondary" className="absolute top left">
+                        {articulo.denominacion.toUpperCase()}
+                    </Badge>
+                    {articulo.imagenes[0]?.url && (
+                        <img
+                            src={articulo.imagenes[0].url}
+                            alt={articulo.denominacion}
+                            className="w-full h-48 object-cover rounded-t-lg"
+                        />
+                    )}
+                </div>
+                <CardContent className="space-y-2 p-4">
+                    <div className="flex items-center justify-between">
+                        <h3 className="text-lg font-bold">{articulo.denominacion}</h3>
                     </div>
-                    <CardContent className="space-y-2 p-4">
-                        <div className="flex items-center justify-between">
-                            <h3 className="text-lg font-bold">{articulo.denominacion}</h3>
-                        </div>
-                        <p className="text-sm text-gray-500">
-                            {articulo.denominacion}
-                        </p>
-                        <p className="text-lg font-bold">${articulo.precioVenta}</p>
-                        <Button
-                            variant="primary"
-                            onClick={() => dispatch({ type: 'ADD_TO_CART', payload: articulo })}
-                        >
-                            Agregar al carrito
-                        </Button>
-                    </CardContent>
-                </Card>
-            ))
-        );
+                    <p className="text-sm text-gray-500">
+                        {articulo.denominacion}
+                    </p>
+                    <p className="text-lg font-bold">${articulo.precioVenta}</p>
+                    <Button
+                        variant="primary"
+                        onClick={() => dispatch({ type: 'ADD_TO_CART', payload: articulo })}
+                    >
+                        Agregar al carrito
+                    </Button>
+                </CardContent>
+            </Card>
+        ));
     };
 
     const categoriasPrincipales = categorias.filter(categoria => !categoria.padreId);
+
+    const articulos = getArticulos(categorias, selectedCategory);
 
     return (
         <div className="bg-white p-6 md:p-8 lg:p-10">
@@ -119,7 +134,7 @@ export default function Menu() {
                         {sucursales.map(sucursal => (
                             <DropdownMenuItem
                                 key={sucursal.id}
-                                className="flex items-center space-x-1 w-full md:w-auto"
+                                className={`flex items-center space-x-1 w-full md:w-auto ${selectedSucursal === sucursal.id ? 'bg-gray-200' : ''}`}
                                 onClick={() => handleSucursalChange(sucursal.id)}
                             >
                                 <ListIcon className="w-5 h-5" />
@@ -139,13 +154,20 @@ export default function Menu() {
                     <DropdownMenuContent align="start" className="w-full md:w-auto">
                         {categoriasPrincipales.map(categoria => (
                             <div key={categoria.id}>
-                                <DropdownMenuItem className="flex items-center space-x-1 w-full md:w-auto" onClick={() => handleCategoryClick(categoria.id)}>
+                                <DropdownMenuItem
+                                    className={`flex items-center space-x-1 w-full md:w-auto ${selectedCategory === categoria.id ? 'bg-gray-200' : ''}`}
+                                    onClick={() => handleCategoryClick(categoria.id)}
+                                >
                                     <ListIcon className="w-5 h-5" />
                                     <span>{categoria.denominacion.toUpperCase()}</span>
                                 </DropdownMenuItem>
                                 {categoria.subCategorias && categoria.subCategorias.length > 0 && (
                                     categoria.subCategorias.map(subCategoria => (
-                                        <DropdownMenuItem key={subCategoria.id} className="flex items-center space-x-1 w-full md:w-auto pl-8" onClick={() => handleCategoryClick(subCategoria.id)}>
+                                        <DropdownMenuItem
+                                            key={subCategoria.id}
+                                            className={`flex items-center space-x-1 w-full md:w-auto pl-8 ${selectedCategory === subCategoria.id ? 'bg-gray-200' : ''}`}
+                                            onClick={() => handleCategoryClick(subCategoria.id)}
+                                        >
                                             <ListIcon className="w-5 h-5" />
                                             <span>{subCategoria.denominacion}</span>
                                         </DropdownMenuItem>
@@ -157,7 +179,7 @@ export default function Menu() {
                 </DropdownMenu>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {renderArticulos(categorias)}
+                {renderArticulos(articulos)}
             </div>
         </div>
     );

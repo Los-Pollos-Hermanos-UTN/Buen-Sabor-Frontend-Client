@@ -12,6 +12,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import Carrito from "@/components/Cart/Carrito.jsx";
 import {GlobalProvider} from "@/context/GlobalContext.jsx";
+import {AuthProvider} from "@/context/AuthContext.jsx";
 
 const App = () => {
     React.useEffect(() => {
@@ -26,6 +27,7 @@ const App = () => {
 
     return (
         <div className="bg-white dark:bg-gray-900 dark:text-white duration-200">
+            <AuthProvider>
             <GlobalProvider>
                 <Navbar/>
                 <ToastContainer />
@@ -37,6 +39,7 @@ const App = () => {
                 </Routes>
                 <Footer/>
             </GlobalProvider>
+            </AuthProvider>
         </div>
     );
 };

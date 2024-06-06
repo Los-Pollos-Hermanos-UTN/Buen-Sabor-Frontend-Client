@@ -7,6 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useGlobalContext } from "../../context/GlobalContext";
 import Logo from "../../assets/food-logo.png";
 import Login from "../user/Login";
+import colors from "tailwindcss/colors.js";
 
 const Navbar = () => {
     const { state, dispatch } = useGlobalContext();
@@ -61,15 +62,15 @@ const Navbar = () => {
                                 </ScrollArea>
                             </div>
                             <div className="flex justify-between items-center font-bold mt-4">
-                                <p>Total:</p>
-                                <p>${totalCartPrice}</p>
+                                <p className={"text-secondary"}>Total:</p>
+                                <p className={"text-secondary"}>${totalCartPrice}</p>
                             </div>
                             <div className="flex space-x-2 mt-4">
                                 <Link to={"/carrito"} className={"w-1/2"} onClick={closePopover}>
-                                    <Button className="w-full">View Cart</Button>
+                                    <Button className="bg-primary hover:bg-secondary duration-200 text-white w-full">Ver Carrito</Button>
                                 </Link>
-                                <Link to={"/menu"} className="w-1/2" onClick={closePopover}>
-                                    <Button variant="outline" className="w-full">Menu</Button>
+                                <Link to={"/menu"} className="w-1/2 " onClick={closePopover}>
+                                    <Button variant="outline" className="w-full border-primary text-primary hover:text-secondary hover:border-secondary">Menu</Button>
                                 </Link>
                             </div>
                         </PopoverContent>

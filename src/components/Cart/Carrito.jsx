@@ -2,22 +2,115 @@ import React from 'react';
 import { useGlobalContext } from '../../context/GlobalContext';
 import { toast } from 'react-toastify';
 import { Button } from '@/components/ui/button';
-import {Link} from "react-router-dom";
+import { useAuth } from '../../context/AuthContext.jsx';
+import { useNavigate } from 'react-router-dom';
 
 export default function Carrito() {
     const { state, dispatch } = useGlobalContext();
-    const { cart, user } = state;
+    const { cart } = state;
+    const { isLoggedIn, username } = useAuth();
+    const navigate = useNavigate();
 
     const totalProductos = cart.reduce((acc, item) => acc + item.precioVenta * item.quantity, 0);
     const cargosPorDelivery = totalProductos * 0.05;
     const total = totalProductos + cargosPorDelivery;
 
-    const handleCheckout = () => {
-        if (!user) {
+    const handleCheckout = async () => {
+        if (!isLoggedIn) {
             toast.error('Por favor, inicie sesión para proceder al pago.');
             return;
         }
-        // Redirigir a la página de pago o realizar la acción de pago
+
+        // Ejemplo de datos de pedido, reemplaza con tus datos reales
+        const pedido = {
+            id: null,
+            eliminado: false,
+            total: total,
+            estado: "PREPARACION",
+            tipoEnvio: "DELIVERY",
+            formaPago: "EFECTIVO",
+            fechaPedido: new Date().toISOString().split('T')[0],
+            domicilio: {
+                id: 1,
+                eliminado: false,
+                calle: "lol",
+                numero: 123,
+                cp: 5501,
+                piso: 1,
+                nroDepto: 3,
+                localidad: {
+                    id: 1,
+                    eliminado: false,
+                    nombre: "Saavedra",
+                    provincia: {
+                        id: 1,
+                        eliminado: false,
+                        nombre: "Ciudad Autónoma de Buenos Aires",
+                        pais: {
+                            id: 1,
+                            eliminado: false,
+                            nombre: "Argentina"
+                        }
+                    }
+                }
+            },
+            sucursal: {
+                id: 1,
+                eliminado: false,
+                nombre: "Sucursal Empresa 1",
+                horarioApertura: "17:00:00",
+                horarioCierre: "23:00:00",
+                casaMatriz: true
+            },
+            factura: null,
+            cliente: {
+                id: 1, // Asegúrate de reemplazar con el ID real del cliente
+                eliminado: false,
+                nombre: "Lucas",
+                apellido: "Cardone",
+                telefono: "2616834611",
+                email: "lucas.a.cardone@gmail.com",
+                fechaNac: "2001-09-25"
+            },
+            detallePedidos: cart.map(item => ({
+                id: null,
+                eliminado: false,
+                cantidad: item.quantity,
+                subTotal: item.precioVenta * item.quantity,
+                articulo: {
+                    id: item.id,
+                    eliminado: false,
+                    denominacion: item.denominacion,
+                    precioVenta: item.precioVenta,
+                    imagenes: item.imagenes,
+                    unidadMedida: {
+                        id: 1,
+                        eliminado: false,
+                        denominacion: "Gramos"
+                    },
+                    categoriaId: 2
+                }
+            })),
+            empleado: null
+        };
+
+        try {
+            const response = await fetch('http://localhost:8080/pedido/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(pedido)
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al guardar el pedido');
+            }
+            toast.success('Pedido realizado con éxito');
+        } catch (error) {
+            toast.error('Error al realizar el pedido');
+            console.error('Error:', error);
+        }
     };
 
     return (
@@ -76,6 +169,7 @@ export default function Carrito() {
         </div>
     );
 }
+
 
 function ArrowRightIcon(props) {
     return (

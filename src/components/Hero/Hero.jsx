@@ -48,7 +48,7 @@ const Hero = () => {
                             <div>
                                 <Link to="/menu">
                                     <Button
-                                        className="bg-primary hover:bg-primary hover:scale-105 duration-200 text-white py-2 px-4">
+                                        className="bg-primary hover:bg-secondary duration-200 text-white py-2 px-4">
                                         Ir al Menu
                                     </Button>
                                 </Link>
