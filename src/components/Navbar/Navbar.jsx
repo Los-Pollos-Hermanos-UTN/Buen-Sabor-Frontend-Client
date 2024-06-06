@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 const Menu = [
     { id: 1, name: "Promociones", link: "/services" },
-    { id: 2, name: "Prueba", link: "/carrito" },
+    { id: 2, name: "Menu", link: "/menu" },
 ];
 
 const Navbar = () => {
@@ -40,10 +40,10 @@ const Navbar = () => {
                                 ))}
                             </ul>
                             <Link
-                                to="/menu"
+                                to="/carrito"
                                 className="bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-1 px-4 rounded-full flex items-center gap-3"
                             >
-                                Order
+                                Carrito
                                 <FaCartShopping className="text-xl text-white drop-shadow-sm cursor-pointer" />
                             </Link>
                         </div>

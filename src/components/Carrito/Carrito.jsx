@@ -5,7 +5,7 @@ export default function Carrito() {
         <div className="flex justify-center items-center h-screen">
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-md">
                 <div className="flex items-center justify-between pb-4 border-b">
-                    <h2 className="text-2xl font-bold">Cart (03)</h2>
+                    <h2 className="text-2xl font-bold">Carrito (03)</h2>
                     <EllipsisVerticalIcon className="text-gray-400" />
                 </div>
                 <div className="space-y-4 py-4">
@@ -75,24 +75,24 @@ export default function Carrito() {
                 </div>
                 <div className="space-y-2 py-4 border-t border-b">
                     <div className="flex justify-between">
-                        <p className="text-sm">Item Total</p>
-                        <p className="text-sm">$55.00</p>
+                        <p className="text-sm">Total Productos</p>
+                        <p className="text-sm">$150.60</p>
                     </div>
                     <div className="flex justify-between">
-                        <p className="text-sm">Delivery Charges</p>
+                        <p className="text-sm">Cargos por Delivery</p>
                         <p className="text-sm">$5.00</p>
                     </div>
                     <div className="flex justify-between">
-                        <p className="text-sm">Govt Taxes & Other Charges</p>
+                        <p className="text-sm">Impuestos</p>
                         <p className="text-sm">$3.50</p>
                     </div>
                 </div>
                 <div className="flex justify-between items-center py-4">
                     <p className="text-xl font-bold">Total</p>
-                    <p className="text-xl font-bold">$63.50</p>
+                    <p className="text-xl font-bold">$159.10</p>
                 </div>
                 <Button className="w-full bg-primary hover:bg-secondary">
-                    Order Now <ArrowRightIcon className="ml-2" />
+                    Ir a Pagar <ArrowRightIcon className="ml-2" />
                 </Button>
             </div>
         </div>
