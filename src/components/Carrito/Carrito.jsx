@@ -1,11 +1,6 @@
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/IZnd1MTRwBy
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
 import { Button } from "@/components/ui/button"
 
-export default function Component() {
+export default function Carrito() {
     return (
         <div className="flex justify-center items-center h-screen">
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-md">
@@ -16,7 +11,7 @@ export default function Component() {
                 <div className="space-y-4 py-4">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2">
-                            <img src="/placeholder.svg" alt="Double Patty Burger" className="w-12 h-12 rounded-full" />
+                            <img src="https://th.bing.com/th/id/OIP.vYCUqeltAX2vaIDv6ruSewAAAA?rs=1&pid=ImgDetMain" alt="Double Patty Burger" className="w-12 h-12 rounded-full" />
                             <div>
                                 <p className="font-bold">Double Patty Burger</p>
                                 <div className="flex items-center space-x-2">
@@ -37,7 +32,7 @@ export default function Component() {
                     </div>
                     <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2">
-                            <img src="/placeholder.svg" alt="All Combo" className="w-12 h-12 rounded-full" />
+                            <img src="https://revistaaventurero.com.mx/wp-content/uploads/2020/05/burger-4953465_1920.jpg" alt="All Combo" className="w-12 h-12 rounded-full" />
                             <div>
                                 <p className="font-bold">All Combo</p>
                                 <div className="flex items-center space-x-2">
@@ -58,7 +53,7 @@ export default function Component() {
                     </div>
                     <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2">
-                            <img src="/placeholder.svg" alt="Veg And crispy Burger" className="w-12 h-12 rounded-full" />
+                            <img src="https://th.bing.com/th/id/OIP.xpHtN8nOMEDD69KJLoiHDAHaHa?rs=1&pid=ImgDetMain" alt="Veg And crispy Burger" className="w-12 h-12 rounded-full" />
                             <div>
                                 <p className="font-bold">Veg And crispy Burger</p>
                                 <div className="flex items-center space-x-2">
@@ -96,7 +91,7 @@ export default function Component() {
                     <p className="text-xl font-bold">Total</p>
                     <p className="text-xl font-bold">$63.50</p>
                 </div>
-                <Button className="w-full bg-secondary">
+                <Button className="w-full bg-primary hover:bg-secondary">
                     Order Now <ArrowRightIcon className="ml-2" />
                 </Button>
             </div>

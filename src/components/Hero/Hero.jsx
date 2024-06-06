@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import Vector from "../../assets/vector3.png";
 import BurgerCanvas from "../Canvas/Burger.jsx";
 import Services from "../Services/Services.jsx";
@@ -20,7 +20,7 @@ const Hero = () => {
         <>
             <div
                 className="min-h-[550px] sm:min-h-[600px] bg-gray-100 flex justify-center items-center dark:bg-gray-950 dark:text-white duration-200 sm:bg-cover sm:bg-right"
-                style={{ backgroundImage: `url(${Vector})` }}
+                style={{backgroundImage: `url(${Vector})`}}
             >
                 <div className="container pb-8 sm:pb-0">
                     <div className="grid grid-cols-1 sm:grid-cols-2">
@@ -33,7 +33,8 @@ const Hero = () => {
                         >
                             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold font-lobster">
                                 Bienvenido al{" "}
-                                <span className="bg-clip-text text-transparent bg-gradient-to-b from-primary to-secondary">
+                                <span
+                                    className="bg-clip-text text-transparent bg-gradient-to-b from-primary to-secondary">
                                     Buen Sabor
                                 </span>
                             </h1>
@@ -53,18 +54,17 @@ const Hero = () => {
                                 </Link>
                             </div>
                         </div>
-
                         <div
                             className="min-h-[450px] sm:min-h-[450px] flex justify-center items-center relative order-2 sm:order-2">
-                            <BurgerCanvas />
+
                         </div>
                     </div>
                 </div>
             </div>
-            <Services />
-            <Banner />
-            <Pruebas />
-            <Testimonial />
+            <Services/>
+            <Banner/>
+            <Pruebas/>
+            <Testimonial/>
             <Menu/>
         </>
     );

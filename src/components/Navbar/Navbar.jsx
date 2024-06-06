@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 const Menu = [
     { id: 1, name: "Promociones", link: "/services" },
-    { id: 2, name: "Prueba", link: "/about" },
+    { id: 2, name: "Prueba", link: "/carrito" },
 ];
 
 const Navbar = () => {
