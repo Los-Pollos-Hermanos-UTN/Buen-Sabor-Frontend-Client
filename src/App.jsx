@@ -11,6 +11,7 @@ import Footer from "./components/Footer/Footer";
 import Menu from "./components/Menu/Menu.jsx"; // Importa el componente Menu
 import AOS from "aos";
 import "aos/dist/aos.css";
+import Carrito from "./components/Carrito/Carrito.jsx";
 
 const App = () => {
     React.useEffect(() => {
@@ -29,7 +30,7 @@ const App = () => {
             <Routes>
                 <Route path="/" element={<Hero />} />
                 <Route path="/services" element={<Services />} />
-                <Route path="/about" element={<Pruebas />} />
+                <Route path="/carrito" element={<Carrito />} />
                 <Route path="/menu" element={<Menu />} /> {/* Define la ruta para el componente Menu */}
                 {/* Agrega más rutas según sea necesario */}
             </Routes>
