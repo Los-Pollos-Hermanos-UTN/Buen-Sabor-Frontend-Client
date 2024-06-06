@@ -89,7 +89,7 @@ export default function Menu() {
         return articulos.map(articulo => (
             <Card className="w-full" key={articulo.id}>
                 <div className="relative">
-                    <Badge variant="secondary" className="absolute top left">
+                    <Badge variant="secondary" className="absolute top left rounded-md rounded-bl-none rounded-tr-none bg-primary hover:bg-primary">
                         {articulo.categoriaDenominacion.toUpperCase()}
                     </Badge>
                     {articulo.imagenes[0]?.url && (
@@ -119,7 +119,7 @@ export default function Menu() {
         ));
     };
 
-    const categoriasPrincipales = categorias.filter(categoria => !categoria.padreId && categoria.articulos.some(articulo => !articulo.eliminado && articulo.precioVenta > 0));
+    const categoriasPrincipales = [{ id: null, denominacion: 'Todo' }, ...categorias.filter(categoria => !categoria.padreId && (categoria.articulos.length > 0 || categoria.subCategorias.some(sub => sub.articulos.length > 0)))];
 
     const articulos = getArticulos(categorias, selectedCategory);
 
@@ -149,7 +149,7 @@ export default function Menu() {
                 </DropdownMenu>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="secondary" className="flex items-center space-x-1 w-full md:w-auto">
+                        <Button variant="secondary" className="flex items-center space-x-1 w-full md:w-auto mt-4 md:mt-0">
                             <ListIcon className="w-5 h-5" />
                             <span>Categorías</span>
                             <ChevronDownIcon className="w-4 h-4" />
@@ -157,46 +157,43 @@ export default function Menu() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start" className="w-full md:w-auto">
                         {categoriasPrincipales.map(categoria => (
-                            <div key={categoria.id}>
+                            <React.Fragment key={categoria.id}>
                                 <DropdownMenuItem
                                     className={`flex items-center space-x-1 w-full md:w-auto ${selectedCategory === categoria.id ? 'bg-gray-200' : ''}`}
                                     onClick={() => handleCategoryClick(categoria.id)}
                                 >
                                     <ListIcon className="w-5 h-5" />
-                                    <span>{categoria.denominacion.toUpperCase()}</span>
+                                    <span>{categoria.denominacion}</span>
                                 </DropdownMenuItem>
                                 {categoria.subCategorias && categoria.subCategorias.length > 0 && (
-                                    categoria.subCategorias
-                                        .filter(subCategoria => subCategoria.articulos.some(articulo => !articulo.eliminado && articulo.precioVenta > 0))
-                                        .map(subCategoria => (
-                                            <DropdownMenuItem
-                                                key={subCategoria.id}
-                                                className={`flex items-center space-x-1 w-full md:w-auto pl-8 ${selectedCategory === subCategoria.id ? 'bg-gray-200' : ''}`}
-                                                onClick={() => handleCategoryClick(subCategoria.id)}
-                                            >
-                                                <ListIcon className="w-5 h-5" />
-                                                <span>{subCategoria.denominacion}</span>
-                                            </DropdownMenuItem>
-                                        ))
+                                    categoria.subCategorias.map(subCategoria => (
+                                        <DropdownMenuItem
+                                            key={subCategoria.id}
+                                            className={`flex items-center space-x-1 w-full md:w-auto pl-8 ${selectedCategory === subCategoria.id ? 'bg-gray-200' : ''}`}
+                                            onClick={() => handleCategoryClick(subCategoria.id)}
+                                        >
+                                            <ListIcon className="w-5 h-5" />
+                                            <span>{subCategoria.denominacion}</span>
+                                        </DropdownMenuItem>
+                                    ))
                                 )}
-                            </div>
+                            </React.Fragment>
                         ))}
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
-            {selectedSucursal ? (
-                isLoading ? (
-                    <div className="flex justify-center items-center h-64">
-                        <p>Cargando...</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {isLoading ? (
+                    <div className="flex justify-center items-center col-span-full h-64">
+                        <p className="text-center text-xl">Cargando...</p>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                        {articulos.length > 0 ? renderArticulos(articulos) : <p>No hay artículos disponibles.</p>}
-                    </div>
-                )
-            ) : (
+                    renderArticulos(articulos)
+                )}
+            </div>
+            {!selectedSucursal && !isLoading && (
                 <div className="flex justify-center items-center h-64">
-                    <p>Seleccione una sucursal</p>
+                    <p className="text-center text-xl">Seleccione una sucursal</p>
                 </div>
             )}
         </div>
@@ -220,9 +217,9 @@ function ListIcon(props) {
             <line x1="8" y1="6" x2="21" y2="6" />
             <line x1="8" y1="12" x2="21" y2="12" />
             <line x1="8" y1="18" x2="21" y2="18" />
-            <line x1="3" y1="6" x2="3.01" y2="6" />
-            <line x1="3" y1="12" x2="3.01" y2="12" />
-            <line x1="3" y1="18" x2="3.01" y2="18" />
+            <line x1="3" y1="6" x2="3" y2="6" />
+            <line x1="3" y1="12" x2="3" y2="12" />
+            <line x1="3" y1="18" x2="3" y2="18" />
         </svg>
     );
 }
@@ -241,7 +238,7 @@ function ChevronDownIcon(props) {
             strokeLinecap="round"
             strokeLinejoin="round"
         >
-            <path d="M6 9l6 6 6-6" />
+            <polyline points="6 9 12 15 18 9" />
         </svg>
     );
 }
