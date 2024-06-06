@@ -65,7 +65,6 @@ const Hero = () => {
             <Banner/>
             <Pruebas/>
             <Testimonial/>
-            <Menu/>
         </>
     );
 };
