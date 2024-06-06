@@ -4,6 +4,7 @@ import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuIte
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import {FaShoppingCart} from "react-icons/fa";
 
 export default function Menu() {
     const { state, dispatch } = useGlobalContext();
@@ -100,21 +101,24 @@ export default function Menu() {
                         />
                     )}
                 </div>
-                <CardContent className="space-y-2 p-4">
-                    <div className="flex items-center justify-between">
+                <CardContent className="space-y-2 p-4 text-center relative">
+                    <div className="flex items-center justify-center">
                         <h3 className="text-lg font-bold">{articulo.denominacion}</h3>
                     </div>
-                    <p className="text-sm text-gray-500">
-                        {articulo.denominacion}
-                    </p>
-                    <p className="text-lg font-bold">${articulo.precioVenta}</p>
-                    <Button
-                        variant="primary"
-                        onClick={() => dispatch({ type: 'ADD_TO_CART', payload: articulo })}
-                    >
-                        Agregar al carrito
-                    </Button>
+
+                    <div className="flex items-center justify-center space-x-2">
+                        <p className="text-lg font-bold">${articulo.precioVenta}</p>
+                    </div>
+                    <div className="absolute bottom-4 right-4">
+                        <button
+                            className="text-primary hover:text-secondary"
+                            onClick={() => dispatch({ type: 'ADD_TO_CART', payload: articulo })}
+                        >
+                            <FaShoppingCart className="w-6 h-6" />
+                        </button>
+                    </div>
                 </CardContent>
+
             </Card>
         ));
     };
@@ -199,7 +203,6 @@ export default function Menu() {
         </div>
     );
 }
-
 function ListIcon(props) {
     return (
         <svg
