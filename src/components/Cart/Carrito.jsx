@@ -31,7 +31,7 @@ export default function Carrito() {
             formaPago: "EFECTIVO",
             fechaPedido: new Date().toISOString().split('T')[0],
             domicilio: {
-                id: 1,
+                id: null,
                 eliminado: false,
                 calle: "lol",
                 numero: 123,
