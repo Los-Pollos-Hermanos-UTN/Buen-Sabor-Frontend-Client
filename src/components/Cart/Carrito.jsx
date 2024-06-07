@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 export default function Carrito() {
     const { state, dispatch } = useGlobalContext();
     const { cart } = state;
-    const { isLoggedIn, username } = useAuth();
+    const { isLoggedIn, userId } = useAuth();
     const navigate = useNavigate();
 
     const totalProductos = cart.reduce((acc, item) => acc + item.precioVenta * item.quantity, 0);
@@ -21,81 +21,86 @@ export default function Carrito() {
             return;
         }
 
-        // Ejemplo de datos de pedido, reemplaza con tus datos reales
-        const pedido = {
-            id: null,
-            eliminado: false,
-            total: total,
-            estado: "PREPARACION",
-            tipoEnvio: "DELIVERY",
-            formaPago: "EFECTIVO",
-            fechaPedido: new Date().toISOString().split('T')[0],
-            domicilio: {
+        try {
+            const response = await fetch(`http://localhost:8080/usuarioCliente/${userId}/cliente`);
+            if (!response.ok) {
+                throw new Error('Error fetching client data');
+            }
+            const clientData = await response.json();
+
+            const pedido = {
                 id: null,
                 eliminado: false,
-                calle: "lol",
-                numero: 123,
-                cp: 5501,
-                piso: 1,
-                nroDepto: 3,
-                localidad: {
-                    id: 1,
+                total: total,
+                estado: "PREPARACION",
+                tipoEnvio: "DELIVERY",
+                formaPago: "EFECTIVO",
+                fechaPedido: new Date().toISOString().split('T')[0],
+                domicilio: {
+                    id: null,
                     eliminado: false,
-                    nombre: "Saavedra",
-                    provincia: {
+                    calle: "lol",
+                    numero: 123,
+                    cp: 5501,
+                    piso: 1,
+                    nroDepto: 3,
+                    localidad: {
                         id: 1,
                         eliminado: false,
-                        nombre: "Ciudad Autónoma de Buenos Aires",
-                        pais: {
+                        nombre: "Saavedra",
+                        provincia: {
                             id: 1,
                             eliminado: false,
-                            nombre: "Argentina"
+                            nombre: "Ciudad Autónoma de Buenos Aires",
+                            pais: {
+                                id: 1,
+                                eliminado: false,
+                                nombre: "Argentina"
+                            }
                         }
                     }
-                }
-            },
-            sucursal: {
-                id: 1,
-                eliminado: false,
-                nombre: "Sucursal Empresa 1",
-                horarioApertura: "17:00:00",
-                horarioCierre: "23:00:00",
-                casaMatriz: true
-            },
-            factura: null,
-            cliente: {
-                id: 1, // Asegúrate de reemplazar con el ID real del cliente
-                eliminado: false,
-                nombre: "Lucas",
-                apellido: "Cardone",
-                telefono: "2616834611",
-                email: "lucas.a.cardone@gmail.com",
-                fechaNac: "2001-09-25"
-            },
-            detallePedidos: cart.map(item => ({
-                id: null,
-                eliminado: false,
-                cantidad: item.quantity,
-                subTotal: item.precioVenta * item.quantity,
-                articulo: {
-                    id: item.id,
+                },
+                sucursal: {
+                    id: 1,
                     eliminado: false,
-                    denominacion: item.denominacion,
-                    precioVenta: item.precioVenta,
-                    imagenes: item.imagenes,
-                    unidadMedida: {
-                        id: 1,
+                    nombre: "Sucursal Empresa 1",
+                    horarioApertura: "17:00:00",
+                    horarioCierre: "23:00:00",
+                    casaMatriz: true
+                },
+                factura: null,
+                cliente: {
+                    id: clientData.id,
+                    eliminado: clientData.eliminado,
+                    nombre: clientData.nombre,
+                    apellido: clientData.apellido,
+                    telefono: clientData.telefono,
+                    email: clientData.email,
+                    fechaNac: clientData.fechaNac
+                },
+                detallePedidos: cart.map(item => ({
+                    id: null,
+                    eliminado: false,
+                    cantidad: item.quantity,
+                    subTotal: item.precioVenta * item.quantity,
+                    articulo: {
+                        id: item.id,
                         eliminado: false,
-                        denominacion: "Gramos"
-                    },
-                    categoriaId: 2
-                }
-            })),
-            empleado: null
-        };
+                        denominacion: item.denominacion,
+                        precioVenta: item.precioVenta,
+                        imagenes: item.imagenes,
+                        unidadMedida: {
+                            id: 1,
+                            eliminado: false,
+                            denominacion: "Gramos"
+                        },
+                        categoriaId: 2
+                    }
+                })),
+                empleado: null
+            };
 
-        try {
-            const response = await fetch('http://localhost:8080/pedido/save', {
+            const saveResponse = await fetch('http://localhost:8080/pedido/save', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -103,7 +108,7 @@ export default function Carrito() {
                 body: JSON.stringify(pedido)
             });
 
-            if (!response.ok) {
+            if (!saveResponse.ok) {
                 throw new Error('Error al guardar el pedido');
             }
             toast.success('Pedido realizado con éxito');

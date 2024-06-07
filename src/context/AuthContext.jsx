@@ -11,6 +11,9 @@ export const AuthProvider = ({ children }) => {
     const [role, setRole] = useState(
         localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).rol : null
     );
+    const [userId, setUserId] = useState(
+        localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).id : null
+    );
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
@@ -18,6 +21,7 @@ export const AuthProvider = ({ children }) => {
             const user = JSON.parse(storedUser);
             setUsername(user.nombreUsuario);
             setRole(user.rol);
+            setUserId(user.id);
             setIsLoggedIn(true);
         }
     }, []);
@@ -26,6 +30,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('user', JSON.stringify(user));
         setUsername(user.nombreUsuario);
         setRole(user.rol);
+        setUserId(user.id);
         setIsLoggedIn(true);
     };
 
@@ -34,10 +39,11 @@ export const AuthProvider = ({ children }) => {
         setIsLoggedIn(false);
         setUsername(null);
         setRole(null);
+        setUserId(null);
     };
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, username, role, login, logout }}>
+        <AuthContext.Provider value={{ isLoggedIn, username, role, userId, login, logout }}>
             {children}
         </AuthContext.Provider>
     );
