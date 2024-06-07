@@ -1,14 +1,14 @@
 // src/components/Login.js
-import React, {useRef, useState} from "react";
-import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
-import {Button} from "@/components/ui/button";
-import {Label} from "@/components/ui/label";
-import {Input} from "@/components/ui/input";
-import {useAuth} from "../../context/AuthContext.jsx";
-import {UserIcon} from "lucide-react";
+import React, { useRef, useState } from "react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { useAuth } from "../../context/AuthContext.jsx";
+import { UserIcon } from "lucide-react";
 
 const Login = () => {
-    const {isLoggedIn, username, login, logout} = useAuth();
+    const { isLoggedIn, username, login, logout } = useAuth();
     const [isRegistering, setIsRegistering] = useState(false);
     const [formData, setFormData] = useState({
         name: "",
@@ -21,7 +21,7 @@ const Login = () => {
     const popoverRef = useRef();
 
     const handleInputChange = (e) => {
-        const {id, value} = e.target;
+        const { id, value } = e.target;
         setFormData((prevState) => ({
             ...prevState,
             [id]: value
@@ -87,7 +87,7 @@ const Login = () => {
                 throw new Error("Error creating client");
             }
 
-            login({nombreUsuario: formData.email, rol: 'user'});
+            login({ id: user.id, nombreUsuario: formData.email, rol: 'user' });
             console.log("Client registered successfully");
         } catch (error) {
             console.error("Error:", error);
@@ -105,7 +105,7 @@ const Login = () => {
             const user = users.find(user => user.userName === formData.email && user.auth0Id === formData.password);
 
             if (user) {
-                login({nombreUsuario: formData.email, rol: 'user'});
+                login({ id: user.id, nombreUsuario: formData.email, rol: 'user' });
                 console.log("Login successful");
             } else {
                 console.error("Invalid email or password");
@@ -130,7 +130,7 @@ const Login = () => {
         <Popover ref={popoverRef}>
             <PopoverTrigger asChild>
                 <Button variant="outline" className="relative">
-                    <UserIcon className="w-5 h-5"/>
+                    <UserIcon className="w-5 h-5" />
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-[400px] rounded-lg p-4 bg-white shadow-xl">
@@ -139,83 +139,114 @@ const Login = () => {
                         <>
                             <h2 className="text-2xl font-bold">Welcome, {username}</h2>
                             <div className="flex items-center space-x-2">
-
                                 <p>{username}</p>
                             </div>
-                            <Button className="bg-primary hover:bg-secondary duration-200 text-white w-full"
-                                    onClick={logout}>Logout</Button>
+                            <Button className="bg-primary hover:bg-secondary duration-200 text-white w-full" onClick={logout}>
+                                Logout
+                            </Button>
+                        </>
+                    ) : isRegistering ? (
+                        <>
+                            <h2 className="text-2xl font-bold">Register</h2>
+                            <div className="space-y-2">
+                                <Label htmlFor="name">Name</Label>
+                                <Input
+                                    id="name"
+                                    type="text"
+                                    placeholder="Enter your name"
+                                    className="w-full"
+                                    autoComplete="off"
+                                    value={formData.name}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="email">Email</Label>
+                                <Input
+                                    id="email"
+                                    type="email"
+                                    placeholder="Enter your email"
+                                    className="w-full"
+                                    autoComplete="off"
+                                    value={formData.email}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="password">Password</Label>
+                                <Input
+                                    id="password"
+                                    type="password"
+                                    placeholder="Enter your password"
+                                    className="w-full"
+                                    autoComplete="off"
+                                    value={formData.password}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                                <Input
+                                    id="confirmPassword"
+                                    type="password"
+                                    placeholder="Confirm your password"
+                                    className="w-full"
+                                    autoComplete="off"
+                                    value={formData.confirmPassword}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="image">Image</Label>
+                                <Input id="image" type="file" className="w-full" onChange={handleImageChange} />
+                            </div>
+                            <Button className="bg-primary hover:bg-secondary duration-200 text-white w-full" onClick={handleRegister}>
+                                Register
+                            </Button>
+                            <p className="text-center text-sm text-gray-500">
+                                Already have an account?{" "}
+                                <button type="button" className="font-medium underline" onClick={toggleRegistering}>
+                                    Login
+                                </button>
+                            </p>
                         </>
                     ) : (
-                        isRegistering ? (
-                            <>
-                                <h2 className="text-2xl font-bold">Register</h2>
-                                <div className="space-y-2">
-                                    <Label htmlFor="name">Name</Label>
-                                    <Input id="name" type="text" placeholder="Enter your name" className="w-full"
-                                           autoComplete="off" value={formData.name} onChange={handleInputChange}/>
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="email">Email</Label>
-                                    <Input id="email" type="email" placeholder="Enter your email" className="w-full"
-                                           autoComplete="off" value={formData.email} onChange={handleInputChange}/>
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="password">Password</Label>
-                                    <Input id="password" type="password" placeholder="Enter your password"
-                                           className="w-full" autoComplete="off" value={formData.password}
-                                           onChange={handleInputChange}/>
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="confirmPassword">Confirm Password</Label>
-                                    <Input id="confirmPassword" type="password" placeholder="Confirm your password"
-                                           className="w-full" autoComplete="off" value={formData.confirmPassword}
-                                           onChange={handleInputChange}/>
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="image">Image</Label>
-                                    <Input id="image" type="file" className="w-full" onChange={handleImageChange}/>
-                                </div>
-                                <Button className="bg-primary hover:bg-secondary duration-200 text-white w-full"
-                                        onClick={handleRegister}>Register</Button>
-                                <p className="text-center text-sm text-gray-500">
-                                    Already have an account?{" "}
-                                    <button
-                                        type="button"
-                                        className="font-medium underline"
-                                        onClick={toggleRegistering}
-                                    >
-                                        Login
-                                    </button>
-                                </p>
-                            </>
-                        ) : (
-                            <>
-                                <h2 className="text-2xl font-bold">Login</h2>
-                                <div className="space-y-2">
-                                    <Label htmlFor="email">Email</Label>
-                                    <Input id="email" type="email" placeholder="Enter your email" className="w-full"
-                                           autoComplete="off" value={formData.email} onChange={handleInputChange}/>
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="password">Password</Label>
-                                    <Input id="password" type="password" placeholder="Enter your password"
-                                           className="w-full" autoComplete="off" value={formData.password}
-                                           onChange={handleInputChange}/>
-                                </div>
-                                <Button className="bg-primary hover:bg-secondary duration-200 text-white w-full"
-                                        onClick={handleLogin}>Login</Button>
-                                <p className="text-center text-sm text-gray-500">
-                                    Don't have an account?{" "}
-                                    <button
-                                        type="button"
-                                        className="font-medium underline"
-                                        onClick={toggleRegistering}
-                                    >
-                                        Register
-                                    </button>
-                                </p>
-                            </>
-                        )
+                        <>
+                            <h2 className="text-2xl font-bold">Login</h2>
+                            <div className="space-y-2">
+                                <Label htmlFor="email">Email</Label>
+                                <Input
+                                    id="email"
+                                    type="email"
+                                    placeholder="Enter your email"
+                                    className="w-full"
+                                    autoComplete="off"
+                                    value={formData.email}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="password">Password</Label>
+                                <Input
+                                    id="password"
+                                    type="password"
+                                    placeholder="Enter your password"
+                                    className="w-full"
+                                    autoComplete="off"
+                                    value={formData.password}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            <Button className="bg-primary hover:bg-secondary duration-200 text-white w-full" onClick={handleLogin}>
+                                Login
+                            </Button>
+                            <p className="text-center text-sm text-gray-500">
+                                Don't have an account?{" "}
+                                <button type="button" className="font-medium underline" onClick={toggleRegistering}>
+                                    Register
+                                </button>
+                            </p>
+                        </>
                     )}
                 </div>
             </PopoverContent>
