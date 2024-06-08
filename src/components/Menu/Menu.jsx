@@ -5,6 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { FaShoppingCart } from "react-icons/fa";
+import ListIcon from './ListIcon';
+import ChevronDownIcon from './ChevronDownIcon';
+import DropdownItems from './DropdownItems';
+import Articulos from './Articulos';
 
 export default function Menu() {
     const { state, dispatch } = useGlobalContext();
@@ -111,59 +115,6 @@ export default function Menu() {
         });
     };
 
-    const renderDropdownItems = (categorias, indent = 0) => {
-        return categorias.map(categoria => (
-            <React.Fragment key={categoria.id}>
-                <DropdownMenuItem
-                    className={`flex items-center space-x-1 w-full md:w-auto ${selectedCategory === categoria.id ? 'bg-gray-200' : ''}`}
-                    style={{ paddingLeft: `${indent * 16}px` }}
-                    onClick={() => handleCategoryClick(categoria.id)}
-                >
-                    <ListIcon className="w-5 h-5" />
-                    <span>{categoria.denominacion}</span>
-                </DropdownMenuItem>
-                {categoria.subCategorias && categoria.subCategorias.length > 0 && (
-                    renderDropdownItems(categoria.subCategorias, indent + 1)
-                )}
-            </React.Fragment>
-        ));
-    };
-
-    const renderArticulos = (articulos) => {
-        return articulos.map(articulo => (
-            <Card className="w-full" key={articulo.id}>
-                <div className="relative">
-                    <Badge variant="secondary" className="absolute top left rounded-md rounded-bl-none rounded-tr-none hover:bg-slate-100">
-                        {articulo.categoriaDenominacion.toUpperCase()}
-                    </Badge>
-                    {articulo.imagenes[0]?.url && (
-                        <img
-                            src={articulo.imagenes[0].url}
-                            alt={articulo.denominacion}
-                            className="w-full h-48 object-cover rounded-t-lg"
-                        />
-                    )}
-                </div>
-                <CardContent className="space-y-2 p-4 text-center relative">
-                    <div className="flex">
-                        <h3 className="text-lg font-bold">{articulo.denominacion}</h3>
-                    </div>
-                    <div className="flex space-x-2">
-                        <p className="text-lg font-bold">${articulo.precioVenta}</p>
-                    </div>
-                    <div className="absolute bottom-4 right-4">
-                        <button
-                            className="text-primary hover:text-secondary"
-                            onClick={() => dispatch({ type: 'ADD_TO_CART', payload: articulo })}
-                        >
-                            <FaShoppingCart className="w-5 h-5" />
-                        </button>
-                    </div>
-                </CardContent>
-            </Card>
-        ));
-    };
-
     const categoriasPrincipales = [{ id: null, denominacion: 'Todo' }, ...categorias.filter(categoria => !categoria.padreId && (categoria.articulos.length > 0 || categoria.subCategorias.some(sub => sub.articulos.length > 0)))];
 
     const articulos = getArticulos(categorias, selectedCategory);
@@ -201,7 +152,7 @@ export default function Menu() {
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start" className="w-full md:w-auto">
-                        {renderDropdownItems(categoriasPrincipales)}
+                        <DropdownItems categorias={categoriasPrincipales} handleCategoryClick={handleCategoryClick} selectedCategory={selectedCategory} />
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
@@ -211,7 +162,7 @@ export default function Menu() {
                         <p className="text-center text-xl">Cargando...</p>
                     </div>
                 ) : (
-                    renderArticulos(articulos)
+                    <Articulos articulos={articulos} dispatch={dispatch} />
                 )}
             </div>
             {!selectedSucursal && !isLoading && (
@@ -220,48 +171,5 @@ export default function Menu() {
                 </div>
             )}
         </div>
-    );
-}
-
-function ListIcon(props) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <line x1="8" y1="6" x2="21" y2="6" />
-            <line x1="8" y1="12" x2="21" y2="12" />
-            <line x1="8" y1="18" x2="21" y2="18" />
-            <line x1="3" y1="6" x2="3" y2="6" />
-            <line x1="3" y1="12" x2="3" y2="12" />
-            <line x1="3" y1="18" x2="3" y2="18" />
-        </svg>
-    );
-}
-
-function ChevronDownIcon(props) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <polyline points="6 9 12 15 18 9" />
-        </svg>
     );
 }
