@@ -38,7 +38,8 @@ export default function Menu() {
     const fetchCategorias = async (sucursalId) => {
         try {
             const response = await fetch(`http://localhost:8080/categoria/listBySucursal/${sucursalId}`);
-            const data = await response.json();
+            let data = await response.json();
+            data = filterEmptyCategorias(data);
             setCategorias(data);
             setIsLoading(false);
         } catch (error) {
@@ -93,6 +94,21 @@ export default function Menu() {
                 !articulo.eliminado && articulo.precioVenta > 0
             ).map(articulo => ({ ...articulo, categoriaDenominacion: categoria.denominacion }))
         );
+    };
+
+    const filterEmptyCategorias = (categorias) => {
+        return categorias.filter(categoria => {
+            const validArticulos = categoria.articulos.filter(articulo =>
+                !articulo.eliminado && articulo.precioVenta > 0
+            );
+            if (validArticulos.length > 0) {
+                return true;
+            } else if (categoria.subCategorias && categoria.subCategorias.length > 0) {
+                categoria.subCategorias = filterEmptyCategorias(categoria.subCategorias);
+                return categoria.subCategorias.length > 0;
+            }
+            return false;
+        });
     };
 
     const renderDropdownItems = (categorias, indent = 0) => {
