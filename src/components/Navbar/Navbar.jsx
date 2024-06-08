@@ -64,7 +64,7 @@ const Navbar = () => {
                                             </Button>
                                         </div>
 
-                                    )) : <p className="text-center">Your cart is empty</p>}
+                                    )) : <p className="text-center">Tu carrito está vacío.</p>}
                                 </ScrollArea>
                             </div>
                             <div className="flex justify-between items-center font-bold mt-4 border-t pt-4">
