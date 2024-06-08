@@ -7,9 +7,9 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Carrito() {
     const { state, dispatch } = useGlobalContext();
-    const { cart } = state;
     const { isLoggedIn, userId } = useAuth();
     const navigate = useNavigate();
+    const { cart, selectedSucursal } = state;
 
     const totalProductos = cart.reduce((acc, item) => acc + item.precioVenta * item.quantity, 0);
     const cargosPorDelivery = totalProductos * 0.05;
@@ -18,6 +18,10 @@ export default function Carrito() {
     const handleCheckout = async () => {
         if (!isLoggedIn) {
             toast.error('Por favor, inicie sesión para proceder al pago.');
+            return;
+        }
+        if (!selectedSucursal) {
+            toast.error('Debe seleccionar una sucursal en el Menú.');
             return;
         }
 
@@ -61,12 +65,7 @@ export default function Carrito() {
                     }
                 },
                 sucursal: {
-                    id: 1,
-                    eliminado: false,
-                    nombre: "Sucursal Empresa 1",
-                    horarioApertura: "17:00:00",
-                    horarioCierre: "23:00:00",
-                    casaMatriz: true
+                    id: selectedSucursal
                 },
                 factura: null,
                 cliente: {
@@ -108,12 +107,14 @@ export default function Carrito() {
                 body: JSON.stringify(pedido)
             });
 
-            if (!saveResponse.ok) {
-                throw new Error('Error al guardar el pedido');
+            if (response.ok) {
+                toast.success('Pedido enviado con éxito');
+                dispatch({ type: 'SET_SELECTED_SUCURSAL', payload: selectedSucursal }); // Clear the cart after sending the order
+            } else {
+                toast.error('Error al realizar el pedido');
             }
-            toast.success('Pedido realizado con éxito');
         } catch (error) {
-            toast.error('Error al realizar el pedido');
+            toast.error('Error al enviar el pedido');
             console.error('Error:', error);
         }
     };

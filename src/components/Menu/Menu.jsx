@@ -2,9 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useGlobalContext } from '../../context/GlobalContext.jsx';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { FaShoppingCart } from "react-icons/fa";
 import ListIcon from './ListIcon';
 import ChevronDownIcon from './ChevronDownIcon';
 import DropdownItems from './DropdownItems';
@@ -12,8 +9,8 @@ import Articulos from './Articulos';
 
 export default function Menu() {
     const { state, dispatch } = useGlobalContext();
+    const { selectedSucursal } = state;
     const [sucursales, setSucursales] = useState([]);
-    const [selectedSucursal, setSelectedSucursal] = useState(null);
     const [categorias, setCategorias] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -53,7 +50,7 @@ export default function Menu() {
     };
 
     const handleSucursalChange = (sucursalId) => {
-        setSelectedSucursal(sucursalId);
+        dispatch({ type: 'SET_SELECTED_SUCURSAL', payload: sucursalId });
         setSelectedCategory(null);
     };
 
