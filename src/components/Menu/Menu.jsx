@@ -4,7 +4,7 @@ import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuIte
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import {FaShoppingCart} from "react-icons/fa";
+import { FaShoppingCart } from "react-icons/fa";
 
 export default function Menu() {
     const { state, dispatch } = useGlobalContext();
@@ -68,22 +68,31 @@ export default function Menu() {
 
     const getArticulos = (categorias, categoryId) => {
         const allCategorias = flattenCategorias(categorias);
-        if (categoryId) {
-            const selectedCategorias = allCategorias.filter(
-                categoria => categoria.id === categoryId || categoria.padreId === categoryId
-            );
-            return selectedCategorias.flatMap(categoria =>
-                categoria.articulos.filter(articulo =>
-                    !articulo.eliminado && articulo.precioVenta > 0
-                ).map(articulo => ({ ...articulo, categoriaDenominacion: categoria.denominacion }))
-            );
+        let selectedCategorias = [];
+
+        if (categoryId !== null) {
+            const getAllSubcategories = (categoriaId) => {
+                const subCategorias = allCategorias.filter(categoria => categoria.padreId === categoriaId);
+                subCategorias.forEach(subCategoria => {
+                    selectedCategorias.push(subCategoria);
+                    getAllSubcategories(subCategoria.id);
+                });
+            };
+
+            const mainCategory = allCategorias.find(categoria => categoria.id === categoryId);
+            if (mainCategory) {
+                selectedCategorias.push(mainCategory);
+                getAllSubcategories(mainCategory.id);
+            }
         } else {
-            return allCategorias.flatMap(categoria =>
-                categoria.articulos.filter(articulo =>
-                    !articulo.eliminado && articulo.precioVenta > 0
-                ).map(articulo => ({ ...articulo, categoriaDenominacion: categoria.denominacion }))
-            );
+            selectedCategorias = allCategorias;
         }
+
+        return selectedCategorias.flatMap(categoria =>
+            categoria.articulos.filter(articulo =>
+                !articulo.eliminado && articulo.precioVenta > 0
+            ).map(articulo => ({ ...articulo, categoriaDenominacion: categoria.denominacion }))
+        );
     };
 
     const renderDropdownItems = (categorias, indent = 0) => {
@@ -104,7 +113,6 @@ export default function Menu() {
         ));
     };
 
-
     const renderArticulos = (articulos) => {
         return articulos.map(articulo => (
             <Card className="w-full" key={articulo.id}>
@@ -124,7 +132,6 @@ export default function Menu() {
                     <div className="flex">
                         <h3 className="text-lg font-bold">{articulo.denominacion}</h3>
                     </div>
-
                     <div className="flex space-x-2">
                         <p className="text-lg font-bold">${articulo.precioVenta}</p>
                     </div>
@@ -137,7 +144,6 @@ export default function Menu() {
                         </button>
                     </div>
                 </CardContent>
-
             </Card>
         ));
     };
@@ -199,8 +205,8 @@ export default function Menu() {
             )}
         </div>
     );
-
 }
+
 function ListIcon(props) {
     return (
         <svg
