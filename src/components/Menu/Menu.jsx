@@ -86,6 +86,25 @@ export default function Menu() {
         }
     };
 
+    const renderDropdownItems = (categorias, indent = 0) => {
+        return categorias.map(categoria => (
+            <React.Fragment key={categoria.id}>
+                <DropdownMenuItem
+                    className={`flex items-center space-x-1 w-full md:w-auto ${selectedCategory === categoria.id ? 'bg-gray-200' : ''}`}
+                    style={{ paddingLeft: `${indent * 16}px` }}
+                    onClick={() => handleCategoryClick(categoria.id)}
+                >
+                    <ListIcon className="w-5 h-5" />
+                    <span>{categoria.denominacion}</span>
+                </DropdownMenuItem>
+                {categoria.subCategorias && categoria.subCategorias.length > 0 && (
+                    renderDropdownItems(categoria.subCategorias, indent + 1)
+                )}
+            </React.Fragment>
+        ));
+    };
+
+
     const renderArticulos = (articulos) => {
         return articulos.map(articulo => (
             <Card className="w-full" key={articulo.id}>
@@ -160,29 +179,7 @@ export default function Menu() {
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start" className="w-full md:w-auto">
-                        {categoriasPrincipales.map(categoria => (
-                            <React.Fragment key={categoria.id}>
-                                <DropdownMenuItem
-                                    className={`flex items-center space-x-1 w-full md:w-auto ${selectedCategory === categoria.id ? 'bg-gray-200' : ''}`}
-                                    onClick={() => handleCategoryClick(categoria.id)}
-                                >
-                                    <ListIcon className="w-5 h-5" />
-                                    <span>{categoria.denominacion}</span>
-                                </DropdownMenuItem>
-                                {categoria.subCategorias && categoria.subCategorias.length > 0 && (
-                                    categoria.subCategorias.map(subCategoria => (
-                                        <DropdownMenuItem
-                                            key={subCategoria.id}
-                                            className={`flex items-center space-x-1 w-full md:w-auto pl-8 ${selectedCategory === subCategoria.id ? 'bg-gray-200' : ''}`}
-                                            onClick={() => handleCategoryClick(subCategoria.id)}
-                                        >
-                                            <ListIcon className="w-5 h-5" />
-                                            <span>{subCategoria.denominacion}</span>
-                                        </DropdownMenuItem>
-                                    ))
-                                )}
-                            </React.Fragment>
-                        ))}
+                        {renderDropdownItems(categoriasPrincipales)}
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
@@ -202,6 +199,7 @@ export default function Menu() {
             )}
         </div>
     );
+
 }
 function ListIcon(props) {
     return (
