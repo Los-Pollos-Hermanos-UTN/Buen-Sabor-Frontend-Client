@@ -24,6 +24,10 @@ export default function Carrito() {
             toast.error('Debe seleccionar una sucursal en el Menú.');
             return;
         }
+        if (cart.length <=0) {
+            toast.error('Tu carrito está vacío.');
+            return;
+        }
 
         try {
             const response = await fetch(`http://localhost:8080/usuarioCliente/${userId}/cliente`);
