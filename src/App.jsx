@@ -5,7 +5,6 @@ import Navbar from "./components/Navbar/Navbar";
 import Hero from "./components/Hero/Hero"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 import Footer from "./components/Footer/Footer";
 import Menu from "./components/Menu/Menu.jsx"; // Importa el componente Menu
 import AOS from "aos";

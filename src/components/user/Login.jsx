@@ -1,4 +1,3 @@
-// src/components/Login.js
 import React, { useRef, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
@@ -6,12 +5,14 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { UserIcon } from "lucide-react";
+import { toast } from "react-toastify";
 
 const Login = () => {
     const { isLoggedIn, username, login, logout } = useAuth();
     const [isRegistering, setIsRegistering] = useState(false);
     const [formData, setFormData] = useState({
         name: "",
+        lastname: "",
         email: "",
         password: "",
         confirmPassword: "",
@@ -25,13 +26,6 @@ const Login = () => {
         setFormData((prevState) => ({
             ...prevState,
             [id]: value
-        }));
-    };
-
-    const handleImageChange = (e) => {
-        setFormData((prevState) => ({
-            ...prevState,
-            image: e.target.files[0]
         }));
     };
 
@@ -62,7 +56,7 @@ const Login = () => {
                 id: 0,
                 eliminado: false,
                 nombre: formData.name,
-                apellido: "",
+                apellido: formData.lastname,
                 telefono: "",
                 email: formData.email,
                 fechaNac: new Date().toISOString().split('T')[0],
@@ -84,11 +78,10 @@ const Login = () => {
             });
 
             if (!clientResponse.ok) {
-                throw new Error("Error creating client");
+                toast.error("Hubo un error registrando el cliente");
             }
 
             login({ id: user.id, nombreUsuario: formData.email, rol: 'user' });
-            console.log("Client registered successfully");
         } catch (error) {
             console.error("Error:", error);
         }
@@ -106,9 +99,8 @@ const Login = () => {
 
             if (user) {
                 login({ id: user.id, nombreUsuario: formData.email, rol: 'user' });
-                console.log("Login successful");
             } else {
-                console.error("Invalid email or password");
+                toast.error("Email o contraseña incorrectos.");
             }
         } catch (error) {
             console.error("Error:", error);
@@ -137,10 +129,7 @@ const Login = () => {
                 <div className="space-y-4">
                     {isLoggedIn ? (
                         <>
-                            <h2 className="text-2xl font-bold">Welcome, {username}</h2>
-                            <div className="flex items-center space-x-2">
-                                <p>{username}</p>
-                            </div>
+                            <h2 className="text-2xl font-bold">Bienvenido, {username}</h2>
                             <Button className="bg-primary hover:bg-secondary duration-200 text-white w-full" onClick={logout}>
                                 Logout
                             </Button>
@@ -149,14 +138,27 @@ const Login = () => {
                         <>
                             <h2 className="text-2xl font-bold">Register</h2>
                             <div className="space-y-2">
-                                <Label htmlFor="name">Name</Label>
+                                <Label htmlFor="name">Nombre</Label>
                                 <Input
                                     id="name"
                                     type="text"
-                                    placeholder="Enter your name"
+                                    placeholder="Ingresa tu nombre"
                                     className="w-full"
                                     autoComplete="off"
                                     value={formData.name}
+                                    onChange={handleInputChange}
+                                />
+
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="lastname">Apellido</Label>
+                                <Input
+                                    id="lastname"
+                                    type="text"
+                                    placeholder="Ingresa tu apellido"
+                                    className="w-full"
+                                    autoComplete="off"
+                                    value={formData.lastname}
                                     onChange={handleInputChange}
                                 />
                             </div>
@@ -165,7 +167,7 @@ const Login = () => {
                                 <Input
                                     id="email"
                                     type="email"
-                                    placeholder="Enter your email"
+                                    placeholder="Ingresa tu Email"
                                     className="w-full"
                                     autoComplete="off"
                                     value={formData.email}
@@ -173,11 +175,11 @@ const Login = () => {
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="password">Password</Label>
+                                <Label htmlFor="password">Contraseña</Label>
                                 <Input
                                     id="password"
                                     type="password"
-                                    placeholder="Enter your password"
+                                    placeholder="Ingresa tu contraseña"
                                     className="w-full"
                                     autoComplete="off"
                                     value={formData.password}
@@ -185,28 +187,25 @@ const Login = () => {
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                                <Label htmlFor="confirmPassword">Repetir Contraseña</Label>
                                 <Input
                                     id="confirmPassword"
                                     type="password"
-                                    placeholder="Confirm your password"
+                                    placeholder="Repite tu contraseña"
                                     className="w-full"
                                     autoComplete="off"
                                     value={formData.confirmPassword}
                                     onChange={handleInputChange}
                                 />
                             </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="image">Image</Label>
-                                <Input id="image" type="file" className="w-full" onChange={handleImageChange} />
-                            </div>
-                            <Button className="bg-primary hover:bg-secondary duration-200 text-white w-full" onClick={handleRegister}>
-                                Register
+                            <Button className="bg-primary hover:bg-secondary duration-200 text-white w-full"
+                                    onClick={handleRegister}>
+                                Registrarse
                             </Button>
                             <p className="text-center text-sm text-gray-500">
-                                Already have an account?{" "}
+                                Ya tienes una cuenta?{" "}
                                 <button type="button" className="font-medium underline" onClick={toggleRegistering}>
-                                    Login
+                                    Iniciar Sesión
                                 </button>
                             </p>
                         </>

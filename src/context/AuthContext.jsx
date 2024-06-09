@@ -1,34 +1,45 @@
-// src/context/AuthContext.js
 import { createContext, useState, useContext, useEffect } from 'react';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('user'));
-    const [username, setUsername] = useState(
-        localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).nombreUsuario : null
-    );
-    const [role, setRole] = useState(
-        localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).rol : null
-    );
-    const [userId, setUserId] = useState(
-        localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).id : null
-    );
+    const [username, setUsername] = useState(null);
+    const [role, setRole] = useState(null);
+    const [userId, setUserId] = useState(null);
+
+    const fetchUserDetails = async (id) => {
+        try {
+            const response = await fetch(`http://localhost:8080/usuarioCliente/${id}/cliente`);
+            if (!response.ok) {
+                throw new Error("Error fetching user details");
+            }
+            const data = await response.json();
+            return data.nombre;
+        } catch (error) {
+            console.error("Error:", error);
+            return null;
+        }
+    };
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
             const user = JSON.parse(storedUser);
-            setUsername(user.nombreUsuario);
             setRole(user.rol);
             setUserId(user.id);
-            setIsLoggedIn(true);
+
+            fetchUserDetails(user.id).then(nombre => {
+                setUsername(nombre);
+                setIsLoggedIn(true);
+            });
         }
     }, []);
 
-    const login = (user) => {
+    const login = async (user) => {
         localStorage.setItem('user', JSON.stringify(user));
-        setUsername(user.nombreUsuario);
+        const nombre = await fetchUserDetails(user.id);
+        setUsername(nombre);
         setRole(user.rol);
         setUserId(user.id);
         setIsLoggedIn(true);

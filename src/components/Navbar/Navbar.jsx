@@ -7,7 +7,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useGlobalContext } from "../../context/GlobalContext";
 import Logo from "../../assets/food-logo.png";
 import Login from "../user/Login";
-import colors from "tailwindcss/colors.js";
 
 const Navbar = () => {
     const { state, dispatch } = useGlobalContext();

@@ -5,7 +5,6 @@ import BurgerCanvas from "../Canvas/Burger.jsx";
 import Services from "../Services/Services.jsx";
 import Banner from "../Banner/Banner.jsx";
 import Testimonial from "../Testimonial/Testimonial.jsx";
-import Menu from "../Menu/Menu.jsx";
 import {Button} from "@/components/ui/button.jsx";
 
 const Hero = () => {
